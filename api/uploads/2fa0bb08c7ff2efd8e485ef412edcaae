@@ -1,0 +1,12 @@
+{
+  "name": "FM Radio",
+  "website": "https://facebook.com",
+  "urlStream": "https://radios.streamaudiousa.com/8002/stream",
+  "program": {
+    "name": "Red FM",
+    "slogan": "Nescafe mornings with Atenea"
+  },
+  "facebook": "https://facebook.com",
+  "instagram": "https://instagram.com",
+  "youtube": "https://youtube.com"
+}
