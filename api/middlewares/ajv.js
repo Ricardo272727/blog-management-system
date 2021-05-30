@@ -20,6 +20,17 @@ const validateBody = (schema) => {
   };
 };
 
+const validateQuery = (schema) => {
+  const validate = ajv.compile(schema);
+  return (req, res, next) => {
+    if (validate(req.query)) {
+      return next();
+    } else {
+      return res.status(400).send(parseAjvErrors(validate.errors[0]));
+    }
+  };
+};
+
 const validateFile = (schema) => {
   const validate = ajv.compile(schema);
   return (req, res, next) => {
@@ -42,4 +53,4 @@ const validateParams = (schema) => {
   };
 };
 
-module.exports = { validateBody, validateParams, validateFile };
+module.exports = { validateBody, validateParams, validateFile, validateQuery };

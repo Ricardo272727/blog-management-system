@@ -4,6 +4,7 @@ const {
   validateBody,
   validateFile,
   validateParams,
+  validateQuery
 } = require("../middlewares/ajv");
 const { multerInstance } = require("../multer");
 const model = require("../models/inventory");
@@ -25,9 +26,10 @@ const create = async (req, res) => {
 const read = async (req, res) => {
   try {
     let id = req.params.id;
+    let laboratory_id = req.query.laboratory_id;
     let ids = [];
     if (id) ids.push(id);
-    let result = await model.read(ids);
+    let result = await model.read(ids, { laboratory_id });
     result = result.map((item) => {
       item.image = `${env.url_static_images}/${item.image}`;
       return item;
@@ -65,7 +67,11 @@ const deleteReq = async (req, res) => {
 };
 
 Router.route("/:id?")
-  .get(validateParams(ajv.optionalId), read)
+  .get(
+    validateParams(ajv.optionalId), 
+    validateQuery(ajv.optionalSearchQuery), 
+    read
+  )
   .delete(
     validateParams(ajv.idParam),
     deleteReq

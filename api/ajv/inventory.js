@@ -68,6 +68,20 @@ module.exports = {
       id: {
         type: 'string',
         match: "^[0-9]+$"
+      },
+      laboratory_id: {
+        type: 'string',
+        match: "^[0-9]+$"
+      }
+    },
+    additionalProperties: false 
+  },
+  optionalSearchQuery: {
+    type: 'object',
+    properties: {
+      laboratory_id: {
+        type: 'string',
+        match: "^[0-9]+$"
       }
     },
     additionalProperties: false 

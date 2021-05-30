@@ -16,12 +16,17 @@ const create = ({ name, amount, image, laboratory_id }) =>
     }
   });
 
-const read = (ids = []) =>
+const read = (ids = [], { laboratory_id }) =>
   new Promise(async (resolve, reject) => {
     try {
       let result = [];
       if (ids.length > 0) {
         result = await knex.select().from("inventory").whereIn("id", ids);
+      } else if (laboratory_id) {
+        result = await knex
+          .select()
+          .from("inventory")
+          .where("laboratory_id", laboratory_id);
       } else {
         result = await knex.select().from("inventory");
       }
@@ -41,7 +46,7 @@ const update = ({ id, data }) =>
     }
   });
 
-const deleteItem = (id) => 
+const deleteItem = (id) =>
   new Promise(async (resolve, reject) => {
     try {
       const result = await knex("inventory").where("id", id).del();

@@ -11,6 +11,7 @@ const links = [
   createLink("Horarios", "/schedules/list"),
   createLink("Laboratorios", "/laboratory/list"),
   createLink("Licencias", "/license/list"),
+  createLink("Usuarios", "/users/list"),
 ];
 
 const Navbar = (props) => {

@@ -1,9 +1,6 @@
 const Router = require("express").Router();
 const ajv = require("../ajv/schedule");
-const {
-  validateBody,
-  validateParams,
-} = require("../middlewares/ajv");
+const { validateBody, validateParams } = require("../middlewares/ajv");
 const model = require("../models/schedule");
 const { respondError, respondItems, respondSuccess } = require("../responses");
 
@@ -19,11 +16,13 @@ const create = async (req, res) => {
 const read = async (req, res) => {
   try {
     let id = req.params.id;
+    let laboratory_id = req.query.laboratory_id;
     let ids = [];
     if (id) ids.push(id);
-    let result = await model.read(ids);
+    let result = await model.read(ids, { laboratory_id });
     return res.send(respondItems(result));
   } catch (error) {
+    console.log({ error });
     return res.status(400).send(respondError(error));
   }
 };
@@ -33,7 +32,7 @@ const update = async (req, res) => {
     const affectedRows = await model.update({
       id: req.params.id,
       data: req.body,
-    });    
+    });
     return res.send(respondSuccess({ affectedRows }));
   } catch (error) {
     return res.status(400).send(respondError(error.message, req.body));

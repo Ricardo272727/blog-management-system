@@ -8,7 +8,7 @@ const create = ({ name, busy, user_id }) =>
       const result = await knex(TABLE).insert({
         name,
         busy,
-        user_id
+        user_id,
       });
       return resolve(result);
     } catch (error) {
@@ -23,7 +23,15 @@ const read = (ids = []) =>
       if (ids.length > 0) {
         result = await knex.select().from(TABLE).whereIn("id", ids);
       } else {
-        result = await knex.select().from(TABLE);
+        result = await knex("laboratories")
+          .join("inventory", function () {
+            this.on("laboratories.id", "=", "inventory.laboratory_id");
+          })
+          .groupBy("laboratories.id")
+          .select(
+            "laboratories.*",
+            knex.raw("COUNT(inventory.id) as articles")
+          );
       }
       return resolve(result);
     } catch (error) {

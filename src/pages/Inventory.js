@@ -6,7 +6,7 @@ import Page from "../components/Page";
 import { createInput, createOption } from "../utils";
 import Form from "../components/Form";
 import * as yup from "yup";
-import { createInventory, editInventory, getInventoryById } from "../api";
+import { createInventory, editInventory, getInventoryById, listLabs } from "../api";
 import useModal from "../hooks/useModal";
 import Modal from "../components/Modal";
 
@@ -17,8 +17,6 @@ const fields = [
   createInput("laboratory_id", "select", "Laboratorio", {
     items: [
       createOption("", ""),
-      createOption("Laboratorio 1", 1),
-      createOption("Laboratorio 2", 2),
     ],
   }),
 ];
@@ -35,6 +33,8 @@ const Inventory = ({ match }) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
   const [initValues, setInitValues] = useState({});
+  const [labs, setLabs] = useState([]);
+  const [renderFields, setRenderFields] = useState(fields);
   const isEdit = Boolean(match.params.id);
   const id = match.params.id;
   const title = isEdit ? "Editar elemento" : "Agregar elemento";
@@ -47,6 +47,18 @@ const Inventory = ({ match }) => {
         setInitValues(_.get(result, "items[0]", {}));
       });
     }
+    listLabs().then(result => {
+      let labs = result.items.map(it => createOption(it.name, it.id));
+      labs.unshift(createOption("", ""));
+      setRenderFields((renderFields) => {
+        return renderFields.map(rf => {
+          if(rf.name == 'laboratory_id'){
+            rf.items = labs; 
+          }
+          return rf;
+        })
+      })
+    });
   }, []);
 
   const onSave = (data) => {
@@ -83,7 +95,7 @@ const Inventory = ({ match }) => {
       <Grid container spacing={1} direction="row">
         <Form
           initValues={initValues}
-          fields={fields}
+          fields={renderFields}
           schema={schema}
           onCancel={onCancel}
           onSave={onSave}

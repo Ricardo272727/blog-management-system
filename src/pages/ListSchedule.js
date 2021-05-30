@@ -27,6 +27,7 @@ const ListSchedule = () => {
     (async () => {
       let result = await listLabs();
       let labs = _.map(result.items, (lab) => createOption(lab.name, lab.id));
+      labs.unshift(createOption("", ""));
       result = await listSchedule();
       setItems(result.items);
       setLaboratories(labs);
@@ -54,8 +55,15 @@ const ListSchedule = () => {
 
   const search = (event) => {
     console.log({ event });
-
-    setLaboratoryId(event.target.value);
+    let laboratory_id = event.target.value;
+    console.log({ laboratory_id });
+    let params = {};
+    if(laboratory_id)
+      params.laboratory_id = laboratory_id;
+    setLaboratoryId(laboratory_id);
+    listSchedule(params).then((result) => {
+      setItems(result.items);
+    });
   };
 
   return (

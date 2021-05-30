@@ -62,7 +62,7 @@ const doDelete = async (route, data) => {
   }
 };
 
-export const listInventory = () => doGet("/inventory");
+export const listInventory = (params) => doGet("/inventory", params);
 export const getInventoryById = (id) => doGet(`/inventory/${id}`);
 export const createInventory = (data) => doPost("/inventory", data);
 export const editInventory = (id, data) => doPut(`/inventory/${id}`, data);
@@ -74,7 +74,7 @@ export const createLab = (data) => doPost("/laboratory", data);
 export const editLab = (id, data) => doPut(`/laboratory/${id}`, data);
 export const deleteLab = (id) => doDelete(`/laboratory/${id}`);
 
-export const listSchedule = () => doGet("/schedule");
+export const listSchedule = (params) => doGet("/schedule", params);
 export const getScheduleById = (id) => doGet(`/schedule/${id}`);
 export const createSchedule = (data) => doPost("/schedule", data);
 export const editSchedule = (id, data) => doPut(`/schedule/${id}`, data);
@@ -86,4 +86,11 @@ export const createLicense = (data) => doPost("/license", data);
 export const editLicense = (id, data) => doPut(`/license/${id}`, data);
 export const deleteLicense = (id) => doDelete(`/license/${id}`);
 
+export const listUsers = () => doGet("/user");
+export const getUserById = (id) => doGet(`/user/${id}`);
+export const createUser = (data) => doPost("/user", data);
+export const editUser = (id, data) => doPut(`/user/${id}`, data);
+export const deleteUser = (id) => doDelete(`/user/${id}`);
+
 export const authenticate = (data) => doPost(`/authenticate`, data);
+

@@ -61,6 +61,7 @@ const ListLaboratory = () => {
               <th>Nombre</th>
               <th>Ocupado</th>
               <th>Titular</th>
+              <th>Número de articulos</th>
               <th></th>
             </tr>
           </thead>
@@ -70,6 +71,7 @@ const ListLaboratory = () => {
                 <td>{lab.name}</td>
                 <td>{lab.busy ? "Si" : "No"}</td>
                 <td>{lab.username || lab.user_id}</td>
+                <td>{lab.articles}</td>
                 <td>
                   <TransparentButton onClick={() => onEdit(lab)}>
                     <EditIcon />

@@ -18,23 +18,41 @@ const create = ({ start_hour, end_hour, date, user_id, laboratory_id }) =>
     }
   });
 
-const read = (ids = []) =>
+const read = (ids = [], params = {}) =>
   new Promise(async (resolve, reject) => {
     try {
+      let laboratory_id = params.laboratory_id;
+      let user_id = params.user_id;
       let result = [];
       if (ids.length > 0) {
         result = await knex.select().from(TABLE).whereIn("id", ids);
+      } else if (laboratory_id || user_id) {
+        if (laboratory_id) {
+          result = await knex(TABLE)
+            .join("users", "schedules.user_id", "users.id")
+            .join("laboratories", "schedules.laboratory_id", "laboratories.id")
+            .where("schedules.laboratory_id", "=", laboratory_id)
+            .select(
+              "schedules.*",
+              knex.raw(
+                "users.name as username, laboratories.name as laboratory_name"
+              )
+            );
+        }
       } else {
-        result = await knex.select().from(TABLE);
+        result = await knex(TABLE)
+          .join("users", "schedules.user_id", "users.id")
+          .join("laboratories", "schedules.laboratory_id", "laboratories.id")
+          .select(
+            "schedules.*",
+            knex.raw(
+              "users.name as username, laboratories.name as laboratory_name"
+            )
+          );
       }
-      result = result.map((item) => {
-        item.username = item.user_id == 1 ? "Lilia Mantilla" : "Josué Sanchez";
-        item.laboratory_name =
-          item.laboratory_id == 1 ? "Laboratorio 1" : "Laboratorio 2";
-        return item;
-      });
       return resolve(result);
     } catch (error) {
+      console.log({ error });
       return reject(error);
     }
   });
